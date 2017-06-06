@@ -1,14 +1,8 @@
-<?php if ( ! defined('BASEPATH')) exit ('No direct script access allowed');
-function css_url($nom) {
-		return base_url().'assets/css/'.$nom;
-}
-
+<?php
+if(!defined('BASEPATH')) exit ('No direct script access allowed');
 
 function js_url($nom) {
-	return base_url().'assets/js/'.$nom;
+	return base_url().'application/views/templates/javascript/'.$nom;
 }
 
-function img_url($nom) {
-	return base_url().'assets/images/'.$nom;
-}
 ?>

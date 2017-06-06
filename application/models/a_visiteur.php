@@ -50,7 +50,7 @@ class A_visiteur extends CI_Model {
 		$idVisiteur = $this->session->userdata('idUser');
 
 		$data['notify'] = $message;
-		$data['mesFiches'] = $this->dataAccess->getFichesVisiteur($idVisiteur);		
+		$data['mesFiches'] = $this->dataAccess->getFiches($idVisiteur);		
 		$this->templates->load('t_visiteur', 'v_visMesFiches', $data);	
 	}	
 
@@ -67,7 +67,7 @@ class A_visiteur extends CI_Model {
 		$data['numMois'] = substr( $mois,4,2);
 		$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
 		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);		
-
+		$data['raison'] = $this->dataAccess->getLaRaison($idVisiteur,$mois);
 		$this->templates->load('t_visiteur', 'v_visVoirListeFrais', $data);
 	}
 
@@ -85,6 +85,7 @@ class A_visiteur extends CI_Model {
 		$data['notify'] = $message;
 		$data['numAnnee'] = substr( $mois,0,4);
 		$data['numMois'] = substr( $mois,4,2);
+		$data['raison'] = $this->dataAccess->getLaRaison($idVisiteur,$mois);
 		$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
 		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);		
 
@@ -119,6 +120,7 @@ class A_visiteur extends CI_Model {
 		$this->dataAccess->recalculeMontantFiche($idVisiteur,$mois);
 	}
 
+	
 	/**
 	 * Ajoute une ligne de frais hors forfait dans une fiche donnée
 	 * 

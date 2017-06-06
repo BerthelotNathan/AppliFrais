@@ -1,8 +1,58 @@
 /* Styles des divisions principales de la page */
+html { 
+  margin:0;
+  padding:0;
+  background-image: url("../images/fond-gsb.jpg"); 
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+#raisonRefus{
+	color:red;
+	font-weight:normal;
+}
+
+#erreurSaisi{
+	color:red;
+}
+
+#erreurSaisiHF{
+	color:red;
+}
+
+#identifiant{
+	color:#469FBD;
+	font-weight:bold;
+}
+
+#tableForfait {
+	text-align:right;
+}
+
+/*Visiteur ou comptable*/
+.typeVisiteur{
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.bouton {
+	padding:6px 0 6px 0;
+	font:bold 13px Arial;
+	background:#0080c0;
+	color:#ffffff;
+	border-radius:3px;
+	width:100px;
+	border:none;
+}
+
+.bouton:hover {
+	color:white;
+	background:#06aeff;
+}
+
 body{
-  background-color: #77AADD;
-	background-image: url(imgs/FONDGLOBAL.jpg);
-	background-repeat: repeat-x;
   margin:0% 0%;
   padding : 0.6em;
   font-family:"Trebuchet MS",Verdana,Geneva,Arial,Helvetica,sans-serif;
@@ -10,13 +60,13 @@ body{
 }
 #page {
   background-color:white;
-  width : 65%;
+  width : 80%;
   margin : auto ;
   border : 0.2em solid black;
   padding : 0.1em;
 }
 #entete{
-  background-color:rgb(72,198,236);
+  background-color:#A0D5E6;
 	color : #980101;
 	border: solid 0.1em #980101;
 	height: 154px;
@@ -25,30 +75,29 @@ body{
 }
 #pied{
   clear : both;
-	border : solid 0.2em white;
-	margin-right : 18%;
+	border : solid 0.2em wihte;
+	margin-left : 18%;
 	margin-top : 1em;
-	text-align : right;
 	padding:0.4em;
 	padding: 0.2em;
 	border-collapse: separate;
+	text-align:right;
 }
 #menuGauche {
 	margin-top : 0.8em;
 	padding: 1em;
-	background-color: white;
-	color: rgb(0,85,227);
+	color: #469FBD;
 	float: left;
-	width: 14%;
+	width: 20%;
 }
 
 #contenu{
 	border: none;
 	padding: 1.3em;
 	background-color: white;
-	border-left :  groove 0.8em #980101;
+	border-left :  groove 0.8em #358DA8;
   margin-top : 1.2em;
-	margin-left: 18%;
+	margin-left: 22%;
 /* permet de fixer une hauteur mini sur les navigateurs modernes */
   min-height:27em;
 /* pour obtenir le même effet sur IE, sachant que si le contenu dépasse, il
@@ -85,14 +134,16 @@ ul#menuList li {
 
 /* apparences des liens dans listes et sous-listes non numérotées */
 ul#menuList a {
-    color:rgb(0,85,227);
+	font-size:14px;
+    color:#469FBD;
     display:block;
     text-decoration:none;
     width:100%;
 }
 ul#menuList a:hover {
-    background: rgb(0,85,227);
-    color: white;
+    /*background: #2e9eea;*/
+    color: black;
+    background-color:#A7E0F2;
 }
 
 #entete #logoGSB {
@@ -103,6 +154,7 @@ ul#menuList a:hover {
 
 #entete h1 {
   margin : 1em;
+  color:#2676ad;
   margin-left:6em;
   font-size : x-large;
   text-align:center;
@@ -127,14 +179,17 @@ ul#menuList a:hover {
   vertical-align:middle;
 }
 
-/* Style des formulaires 
-border : solid 0.1em #000;border-bottom-width:1px;*/
+
+
 .corpsForm {
   margin-bottom : 0em;
   width : 95%;
+  
 }
+
+
 .piedForm {
-/*  border-bottom-width : 0.1em;
+  /*border-bottom-width : 0.1em;
   border-left-width : 0.1em;
   border-right-width : 0.1em;
   border-top-width : 0em;
@@ -147,16 +202,16 @@ border : solid 0.1em #000;border-bottom-width:1px;*/
 form {
   margin-bottom:1em;  
 }
-.corpsForm legend {
+legend {
   font-weight:bold;
   font-size:1.2em;
 }
 
 .corpsForm label{
-  float: left;
-  text-align:right;
-  width:25%;
-	margin: 0;
+  float: center;
+  text-align:left;
+  width:29%;
+	margin: 5px;
 	padding: 0 .5em 0 0;
 	line-height: 1.8;	
 }
@@ -164,6 +219,12 @@ input, button, textarea, select{
   font-family:"Trebuchet MS", sans-serif;
   font-size : 1em;
 }
+#inputETP,#inputKM,#inputNUI,#inputREP{
+	text-align : right;
+}
+
+
+
 button{
   width : 60px;
   height : 30px;
@@ -171,7 +232,7 @@ button{
   vertical-align:middle;
 }
 input:hover, textarea:hover, select:hover{
-  background-color : #FAFAE6;
+  background-color : #2e9eea;
   cursor : pointer;
 }
 
@@ -207,12 +268,13 @@ taille de caractères légèrement supérieure à la normale */
 /* Style pour les liens de la page principale */
 #contenu a {
    font-size : 1.1em;
-   color:gray;
+   color:#1184AB;
    text-decoration:none;
 }
 #contenu a:hover {
    text-decoration:underline;
-   background-color : #D9BB7A;
+   color:black;
+   background:#A7E0F2;
    font-size : 1em;
 }
 
@@ -233,7 +295,7 @@ taille de caractères légèrement supérieure à la normale */
 
 /* Style pour les lignes d'en-tête des tableaux */
 #contenu th {  
-   background-color:#77AADD;
+   background-color:#A0D5E6;
    height:21px;
    text-align:center;
    vertical-align:top;
@@ -282,7 +344,7 @@ table.listeLegere td.date, table.listeLegere td.action{
   font-weight:normal;
 }
 table.listeLegere td.libelle{
-  text-align : left;
+  text-align : center;
   color:black;
   font-weight:normal;
 }
@@ -301,12 +363,12 @@ table.listeLegere th.eltForfait{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 14px;
 	font-weight: bold;
-	color: #1D2941;
+	color:black;
 	text-decoration: none;
 	border : 1px solid #6988BE;
 	padding-left: 25px;
 	padding-top:8px;
-	background-color: #E9F1FE;
+	background-color: #A0D5E6;
 	height : 24px;
 }
 

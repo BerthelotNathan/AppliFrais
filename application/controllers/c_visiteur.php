@@ -40,6 +40,9 @@ class C_visiteur extends CI_Controller {
 
 				$this->a_visiteur->accueil();
 			}
+			
+			
+			
 			elseif ($action == 'mesFiches')		// mesFiches demandé : on active la fonction mesFiches du modèle visiteur
 			{
 				$this->load->model('a_visiteur');
@@ -50,11 +53,18 @@ class C_visiteur extends CI_Controller {
 				$idVisiteur = $this->session->userdata('idUser');
 				$this->a_visiteur->mesFiches($idVisiteur);
 			}
+			
+			
+			
 			elseif ($action == 'deconnecter')	// deconnecter demandé : on active la fonction deconnecter du modèle authentif
 			{
 				$this->load->model('authentif');
 				$this->authentif->deconnecter();
 			}
+			
+			
+			
+			
 			elseif ($action == 'voirFiche')		// voirFiche demandé : on active la fonction voirFiche du modèle authentif
 			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à consulter)
 			
@@ -71,6 +81,11 @@ class C_visiteur extends CI_Controller {
 
 				$this->a_visiteur->voirFiche($idVisiteur, $mois);
 			}
+			
+			
+			
+			
+			
 			elseif ($action == 'modFiche')		// modFiche demandé : on active la fonction modFiche du modèle authentif
 			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à modifier)
 			
@@ -87,6 +102,14 @@ class C_visiteur extends CI_Controller {
 
 				$this->a_visiteur->modFiche($idVisiteur, $mois);
 			}
+			
+			
+			
+			
+			
+			
+			
+			
 			elseif ($action == 'signeFiche') 	// signeFiche demandé : on active la fonction signeFiche du modèle visiteur ...
 			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à modifier)
 				$this->load->model('a_visiteur');
@@ -101,6 +124,12 @@ class C_visiteur extends CI_Controller {
 				// ... et on revient à mesFiches
 				$this->a_visiteur->mesFiches($idVisiteur, "La fiche $mois a été signée. <br/>Pensez à envoyer vos justificatifs afin qu'elle soit traitée par le service comptable rapidement.");
 			}
+			
+			
+			
+			
+			
+			
 			elseif ($action == 'majForfait') // majFraisForfait demandé : on active la fonction majFraisForfait du modèle visiteur ...
 			{	// TODO : conrôler que l'obtention des données postées ne rend pas d'erreurs
 				// TODO : dans la dynamique de l'application, contrôler que l'on vient bien de modFiche
@@ -119,6 +148,9 @@ class C_visiteur extends CI_Controller {
 				// ... et on revient en modification de la fiche
 				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Modification(s) des éléments forfaitisés enregistrée(s) ...');
 			}
+			
+			
+			
 			elseif ($action == 'ajouteFrais') // ajouteLigneFrais demandé : on active la fonction ajouteLigneFrais du modèle visiteur ...
 			{	// TODO : conrôler que l'obtention des données postées ne rend pas d'erreurs
 				// TODO : dans la dynamique de l'application, contrôler que l'on vient bien de modFiche
@@ -139,7 +171,11 @@ class C_visiteur extends CI_Controller {
 				$this->a_visiteur->ajouteFrais($idVisiteur, $mois, $uneLigne);
 
 				// ... et on revient en modification de la fiche
-				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" ajoutée ...');				
+				$this->a_visiteur->modFiche($idVisiteur, $mois, 'Ligne "Hors forfait" ajoutée ...');
+				
+				
+				
+				
 			}
 			elseif ($action == 'supprFrais') // suppprLigneFrais demandé : on active la fonction suppprLigneFrais du modèle visiteur ...
 			{	// TODO : contrôler la validité du second paramètre (mois de la fiche à modifier)

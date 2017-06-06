@@ -12,7 +12,7 @@ class A_comptable extends CI_Model {
     }
 
 	/**
-	 * Accueil du comptable
+	 * Accueil du visiteur
 	 * La fonction intègre un mécanisme de contrôle d'existence des 
 	 * fiches de frais sur les 6 derniers mois. 
 	 * Si l'une d'elle est absente, elle est créée
@@ -33,15 +33,15 @@ class A_comptable extends CI_Model {
 		foreach ($lesMois as $unMois){
 			if(!$this->dataAccess->ExisteFiche($idVisiteur, $unMois)) $this->dataAccess->creeFiche($idVisiteur, $unMois);
 		}
-		// envoie de la vue accueil du comptable
-		$this->templates->load('t_comptable', 'v_comptAccueil');
+		// envoie de la vue accueil du visiteur
+		$this->templates->load('t_comptable', 'v_comAccueil');
 	}
 	
 	/**
-	 * Liste les fiches existantes du comptable connecté et 
+	 * Liste les fiches existantes du visiteur connecté et 
 	 * donne accès aux fonctionnalités associées
 	 *
-	 * @param $idVisiteur : l'id du comptable 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $message : message facultatif destiné à notifier l'utilisateur du résultat d'une action précédemment exécutée
 	*/
 	public function mesFiches ($idVisiteur, $message=null)
@@ -50,14 +50,16 @@ class A_comptable extends CI_Model {
 		$idVisiteur = $this->session->userdata('idUser');
 
 		$data['notify'] = $message;
-		$data['mesFiches'] = $this->dataAccess->getFichesComptable($idVisiteur);		
-		$this->templates->load('t_comptable', 'v_comptMesFiches', $data);	
+		$data['mesFiches'] = $this->dataAccess->getFichesValidation($idVisiteur);		
+		$this->templates->load('t_comptable', 'v_comFicheFrais', $data);	
 	}	
+	
+
 
 	/**
 	 * Présente le détail de la fiche sélectionnée 
 	 * 
-	 * @param $idVisiteur : l'id du comptable 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche à modifier 
 	*/
 	public function voirFiche($idVisiteur, $mois)
@@ -65,101 +67,93 @@ class A_comptable extends CI_Model {
 
 		$data['numAnnee'] = substr( $mois,0,4);
 		$data['numMois'] = substr( $mois,4,2);
+		$data['util'] = $idVisiteur;
 		$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
-		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);		
+		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfaitComp($idVisiteur,$mois);		
 
-		$this->templates->load('t_comptable', 'v_comptVoirListeFrais', $data);
+		$this->templates->load('t_comptable', 'v_comVoirListeFrais', $data);
 	}
 
-	/**
-	 * Présente le détail de la fiche sélectionnée et donne 
-	 * accés à la modification du contenu de cette fiche.
-	 * 
-	 * @param $idVisiteur : l'id du comptable 
-	 * @param $mois : le mois de la fiche à modifier 
-	 * @param $message : message facultatif destiné à notifier l'utilisateur du résultat d'une action précédemment exécutée
-	*/
-	public function modFiche($idVisiteur, $mois, $message=null)
-	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
-
-		$data['notify'] = $message;
-		$data['numAnnee'] = substr( $mois,0,4);
-		$data['numMois'] = substr( $mois,4,2);
-		$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
-		$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);		
-
-		$this->templates->load('t_comptable', 'v_visModListeFrais', $data);
-	}
 	
 	/**
 	 * Présente le détail de la fiche sélectionnée et donne
 	 * accés à la modification du contenu de cette fiche.
 	 *
-	 * @param $idVisiteur : l'id du comptable
+	 * @param $idVisiteur : l'id du visiteur
 	 * @param $mois : le mois de la fiche à modifier
 	 * @param $message : message facultatif destiné à notifier l'utilisateur du résultat d'une action précédemment exécutée
 	 */
-	public function consultFiche($idVisiteur, $mois, $message=null) //Il ne faut pas envoyer l'idVisiteur (id du comptable) mais l'id de la fiche a consulté
+	public function modFicheComptable($idVisiteur, $mois, $message=null)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
 	
 	$data['notify'] = $message;
+	$data['util'] = $idVisiteur;
 	$data['numAnnee'] = substr( $mois,0,4);
 	$data['numMois'] = substr( $mois,4,2);
 	$data['lesFraisHorsForfait'] = $this->dataAccess->getLesLignesHorsForfait($idVisiteur,$mois);
-	$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfait($idVisiteur,$mois);
+	$data['lesFraisForfait'] = $this->dataAccess->getLesLignesForfaitComp($idVisiteur,$mois);
 	
-	$this->templates->load('t_comptable', 'v_comptModListeFrais', $data);
+	$this->dataAccess->recalculeMontantFiche($idVisiteur, $mois);
+	$this->templates->load('t_comptable', 'v_comModFiche', $data);
 	}
-
+	
+	
 	/**
-	 * Signe une fiche de frais en changeant son état
+	 * Valide une fiche de frais en changeant son état
 	 * 
-	 * @param $idVisiteur : l'id du comptable 
+	 * @param $idVisiteur : l'id du visiteur ayant signée la fiche de frais 
 	 * @param $mois : le mois de la fiche à signer
 	*/
-	public function validFiche($idVisiteur, $mois)
+	public function valideFiche($idVisiteur, $mois)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
 		// TODO : intégrer une fonctionnalité d'impression PDF de la fiche
 
-	    $this->dataAccess->validFiche($idVisiteur, $mois);
+	    $this->dataAccess->valideFiche($idVisiteur, $mois);
 	}
 	
-	public function refusFiche($idVisiteur, $mois)
+	
+	/**
+	 * Refuse une fiche de frais en changeant son état
+	 *
+	 * @param $idVisiteur : l'id du visiteur ayant signée la fiche de frais
+	 * @param $mois : le mois de la fiche à signer
+	 */
+	public function refuseFiche($idVisiteur, $mois, $commentaire)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
 	// TODO : intégrer une fonctionnalité d'impression PDF de la fiche
+	$this->dataAccess->commentaireRefusComptable($idVisiteur,$mois,$commentaire);
+	$this->dataAccess->refuseFiche($idVisiteur, $mois);
+	}
+	
+	public function refuseFicheCommentaire($idVisiteur, $mois)
+	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
+	// TODO : intégrer une fonctionnalité d'impression PDF de la fiche
+		$data['util'] = $idVisiteur;
 		$data['numAnnee'] = substr( $mois,0,4);
 		$data['numMois'] = substr( $mois,4,2);
-		$data['mois'] = $mois;
-		$data['idVisiteur'] = $idVisiteur;
-		$this->templates->load('t_comptable', 'v_comptRefusFiche', $data);
-		
-	}
-	public function refusConfirm($idVisiteur, $mois, $commentaire)
-	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
-	// TODO : intégrer une fonctionnalité d'impression PDF de la fiche
-	$this->dataAccess->refusConfirm($idVisiteur, $mois, $commentaire);
-	$this->dataAccess->refusConfirmCommentaire($idVisiteur, $mois, $commentaire);
+		$this->templates->load('t_comptable', 'v_comRefuseFicheCommentaire', $data);
 	}
 
 	/**
 	 * Modifie les quantités associées aux frais forfaitisés dans une fiche donnée
 	 * 
-	 * @param $idVisiteur : l'id du comptable 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche concernée
 	 * @param $lesFrais : les quantités liées à chaque type de frais, sous la forme d'un tableau
 	*/
-	public function majForfait($idVisiteur, $mois, $lesMontants)
+	public function majForfait($idVisiteur, $mois, $lesFrais)
 	{	// TODO : s'assurer que les paramètres reçus sont cohérents avec ceux mémorisés en session
 		// TODO : valider les données contenues dans $lesFrais ...
 		
-		$this->dataAccess->majLignesForfaitComptable($idVisiteur,$mois,$lesMontants);
+		$this->dataAccess->majLignesForfaitComp($idVisiteur,$mois,$lesFrais);
 		$this->dataAccess->recalculeMontantFiche($idVisiteur,$mois);
 	}
+	
 
 	/**
 	 * Ajoute une ligne de frais hors forfait dans une fiche donnée
 	 * 
-	 * @param $idVisiteur : l'id de l'utilisateur 
+	 * @param $idVisiteur : l'id du visiteur 
 	 * @param $mois : le mois de la fiche concernée
 	 * @param $lesFrais : les quantités liées à chaque type de frais, sous la forme d'un tableau
 	*/

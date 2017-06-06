@@ -1,19 +1,15 @@
 <?php
-	$this->load->helper('url');
+$this->load->helper('url');
 ?>
 
 <div id="contenu">
 	<h2>Renseigner ma fiche de frais du mois <?php echo $numMois."-".$numAnnee; ?></h2>
 					
 	<div class="corpsForm">
-		<fieldset>
-				<legend>Eléments forfaitisés</legend>
-				<?php if(isset($raison['raison'])) {
-							//if($raison['raison'] != NULL) {
-								echo '<fieldset style= "color:red;border:none;">La fiche a été refusée.</fieldset>';//'<fieldset><legend id="raisonRefus">Raison du refus</legend>'.$raison['raison'].'</fieldset><br>';
-							//}
-							}
-					?>
+	  
+	<fieldset>
+		<legend>Eléments forfaitisés</legend>			
+				
 				<table id="tableForfait" style="border:none;">
 				<tr>
 					<th>Forfait</th>
@@ -36,11 +32,11 @@
 							<td>
 								<label for="'.$idFrais.'">'.$libelle.'</label>
 							</td>
-							<td>						
+							<td>
 								<input type="text" readonly id="'.$idFrais.'" name="lesFrais['.$idFrais.']" size="10" maxlength="5" value="'.$quantite.'" />
 							</td>
 							<td id="montant'.$idFrais.'">
-								<input id="input'.$idFrais.'" readonly type="text" name="lesMontants['.$idFrais.']" required="required" size="10" maxlength="5" value="'.$montant.'"onchange="calculForfait('.$idFrais.')"/> € 
+								<input id="input'.$idFrais.'" readonly type="text" name="lesMontants['.$idFrais.']"  size="10" maxlength="5" value="'.$montant.'"onchange="calculForfait('.$idFrais.')"/> € 
 							</td>		
 							<td id="total'.$idFrais.'" >
 								0
@@ -53,37 +49,36 @@
 							<td style="border:none;"></td><td style="border:none;"></td><td>Total frais forfaitisé</td><td id="eltotal">0</td>
 							</tr>'?>
 				</table>
-				
-		</fieldset>
-		<p></p>
+	</fieldset>
+	
 	</div>
 	<br>
 	<fieldset>
 		<legend>Descriptif des éléments hors forfait</legend>
-		<table class="listeLegere">
-			<tr>
-				<th >Date</th>
-				<th >Libellé</th>  
-				<th >Montant</th>               
-			</tr>
-			  
-			<?php    
-				foreach( $lesFraisHorsForfait as $unFraisHorsForfait) 
-				{
-					$libelle = $unFraisHorsForfait['libelle'];
-					$date = $unFraisHorsForfait['date'];
-					$montant=$unFraisHorsForfait['montant'];
-					$id = $unFraisHorsForfait['id'];
-					echo 
-					'<tr>
-						<td class="date">'.$date.'</td>
-						<td class="libelle">'.$libelle.'</td>
-						<td class="montant">'.$montant.'</td>
-					</tr>';
-				}
-			?>	  
+			<table class="listeLegere">
 			
-		</table>
+				<tr>
+					<th >Date</th>
+					<th >Libellé</th>  
+					<th >Montant</th>              
+				</tr>
+			  
+				<?php    
+					foreach( $lesFraisHorsForfait as $unFraisHorsForfait) 
+					{
+						$libelle = $unFraisHorsForfait['libelle'];
+						$date = $unFraisHorsForfait['date'];
+						$montant=$unFraisHorsForfait['montant'];
+						$id = $unFraisHorsForfait['id'];
+						echo 
+						
+						'<tr>
+							<td class="date">'.$date.'</td>
+							<td class="libelle">'.$libelle.'</td>
+							<td class="montant">'.$montant.'</td>
+						</tr>';
+					}
+				?>	  								  
+			</table>
 	</fieldset>
-
 </div>

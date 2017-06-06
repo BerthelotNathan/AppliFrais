@@ -45,11 +45,17 @@ CREATE TABLE IF NOT EXISTS `etat` (
 
 -- --------------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `typeV` (
-  `idType` int,
-  `libelle` varchar(20),
+--
+-- Structure de la table `typevisiteur`
+--
+
+CREATE TABLE IF NOT EXISTS `typevisiteur` (
+  `idType` char(1) NOT NULL,
+  `libelleType` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`idType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
 
 --
 -- Structure de la table `visiteur`
@@ -65,9 +71,9 @@ CREATE TABLE IF NOT EXISTS `visiteur` (
   `cp` char(5) DEFAULT NULL,
   `ville` char(30) DEFAULT NULL,
   `dateEmbauche` date DEFAULT NULL,
-  `numType` int DEFAULT NULL,
+  `typeVisiteur` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`numType`) REFERENCES typeV(`idType`)
+  FOREIGN KEY (`typeVisiteur`) REFERENCES typevisiteur(`idType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -121,7 +127,6 @@ CREATE TABLE IF NOT EXISTS `lignefraishorsforfait` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`idVisiteur`, `mois`) REFERENCES FicheFrais(`idVisiteur`, `mois`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
