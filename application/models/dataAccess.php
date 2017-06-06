@@ -220,7 +220,9 @@ class DataAccess extends CI_Model {
 				SET VISITEUR = (SELECT CODEVISITEUR
 								FROM AF_VISITEUR
 								WHERE AF_VISITEUR.ID = AF_FICHEFRAIS.IDVISITEUR
-								AND AF_LIGNEFRAISFORFAIT.IDFRAISFORFAIT = '$unIdFrais')";
+								AND AF_FICHEFRAIS.IDVISITEUR = '$idVisiteur'
+								AND AF_FICHEFRAIS.MOIS = '$mois')";
+								
 								
 				
 		$this->db->simple_query($req);
@@ -246,8 +248,7 @@ class DataAccess extends CI_Model {
 					SET FRAISFORFAIT = (SELECT CODEFRAISFORFAIT
 										FROM AF_FRAISFORFAIT
 										WHERE AF_FRAISFORFAIT.ID = AF_LIGNEFRAISFORFAIT.IDFRAISFORFAIT
-										AND AF_LIGNEFRAISFORFAIT.IDVISITEUR = '$idVisiteur'
-									  	AND AF_LIGNEFRAISFORFAIT.MOIS = '$mois')";
+										AND AF_LIGNEFRAISFORFAIT.IDFRAISFORFAIT = '$unIdFrais')";
 			
 			$this->db->simple_query($req);
 			$this->db->simple_query($req2);
