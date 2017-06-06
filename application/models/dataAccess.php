@@ -220,8 +220,7 @@ class DataAccess extends CI_Model {
 				SET VISITEUR = (SELECT CODEVISITEUR
 								FROM AF_VISITEUR
 								WHERE AF_VISITEUR.ID = AF_FICHEFRAIS.IDVISITEUR
-								AND AF_FICHEFRAIS.IDVISITEUR = '$idVisiteur'
-								AND AF_FICHEFRAIS.MOIS = '$mois')";
+								AND AF_LIGNEFRAISFORFAIT.IDFRAISFORFAIT = '$unIdFrais')";
 								
 				
 		$this->db->simple_query($req);
