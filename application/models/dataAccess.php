@@ -206,22 +206,24 @@ class DataAccess extends CI_Model {
 	 * @param $mois sous la forme aaaamm
 	*/
 	public function creeFiche($idVisiteur,$mois){
+		
+		
 		$req = "insert into af_fichefrais(idvisiteur,mois,nbJustificatifs,montantValide,dateModif,idEtat) 
 				values('$idVisiteur','$mois',0,0,now(),'CR')";
 		
 		$req2 = "UPDATE AF_FICHEFRAIS
 				SET ETAT = (SELECT CODEETAT
 							FROM AF_ETAT
-							WHERE AF_ETAT.ID = AF_FICHEFRAIS.IDETAT
-							AND AF_FICHEFRAIS.IDVISITEUR = '$idVisiteur'
-							AND AF_FICHEFRAIS.MOIS = '$mois')";
+							WHERE AF_ETAT.ID = AF_FICHEFRAIS.IDETAT)
+				WHERE AF_FICHEFRAIS.IDVISITEUR = '$idVisiteur' 
+				AND AF_FICHEFRAIS.MOIS = '$mois';";
 		
 		$req3 = "UPDATE AF_FICHEFRAIS
 				SET VISITEUR = (SELECT CODEVISITEUR
 								FROM AF_VISITEUR
-								WHERE AF_VISITEUR.ID = AF_FICHEFRAIS.IDVISITEUR
-								AND AF_FICHEFRAIS.IDVISITEUR = '$idVisiteur'
-								AND AF_FICHEFRAIS.MOIS = '$mois')";
+								WHERE AF_VISITEUR.ID = AF_FICHEFRAIS.IDVISITEUR)
+				WHERE AF_FICHEFRAIS.IDVISITEUR = '$idVisiteur'
+				AND AF_FICHEFRAIS.MOIS = '$mois';";
 								
 								
 				
@@ -240,15 +242,17 @@ class DataAccess extends CI_Model {
 					SET FICHEFRAIS = (SELECT CODEFICHEFRAIS
 									  FROM AF_FICHEFRAIS
 									  WHERE AF_FICHEFRAIS.IDVISITEUR = AF_LIGNEFRAISFORFAIT.IDVISITEUR 
-									  AND AF_FICHEFRAIS.MOIS = AF_LIGNEFRAISFORFAIT.MOIS
-									  AND AF_LIGNEFRAISFORFAIT.IDVISITEUR = '$idVisiteur'
-									  AND AF_LIGNEFRAISFORFAIT.MOIS = '$mois')";
+									  AND AF_FICHEFRAIS.MOIS = AF_LIGNEFRAISFORFAIT.MOIS)
+					WHERE AF_LIGNEFRAISFORFAIT.IDVISITEUR = '$idVisiteur'
+					AND AF_LIGNEFRAISFORFAIT.MOIS = '$mois';";
 			
 			$req3 = "UPDATE AF_LIGNEFRAISFORFAIT
 					SET FRAISFORFAIT = (SELECT CODEFRAISFORFAIT
 										FROM AF_FRAISFORFAIT
-										WHERE AF_FRAISFORFAIT.ID = AF_LIGNEFRAISFORFAIT.IDFRAISFORFAIT
-										AND AF_LIGNEFRAISFORFAIT.IDFRAISFORFAIT = '$unIdFrais')";
+										WHERE AF_FRAISFORFAIT.ID = AF_LIGNEFRAISFORFAIT.IDFRAISFORFAIT)
+					WHERE AF_LIGNEFRAISFORFAIT.FRAISFORFAIT = '$unIdFrais'
+					AND AF_LIGNEFRAISFORFAIT.IDVISITEUR = '$idVisiteur'
+					AND AF_LIGNEFRAISFORFAIT.MOIS = '$mois';";
 			
 			$this->db->simple_query($req);
 			$this->db->simple_query($req2);
@@ -387,7 +391,7 @@ class DataAccess extends CI_Model {
 	public function getLesInfosFicheFrais($idVisiteur,$mois){
 		$req = "select af_ficheFrais.idEtat as idEtat, af_ficheFrais.dateModif as dateModif, 
 					af_ficheFrais.nbJustificatifs as nbJustificatifs, af_ficheFrais.montantValide as montantValide, af_etat.libelle as libEtat 
-				from  af_fichefrais inner join Etat on af_ficheFrais.idEtat = af_etat.id 
+				from  af_fichefrais inner join af_etat on af_ficheFrais.idEtat = af_etat.id 
 				where af_fichefrais.idvisiteur ='$idVisiteur' and af_fichefrais.mois = '$mois'";
 		$rs = $this->db->query($req);
 		$laLigne = $rs->first_row('array');
@@ -403,7 +407,7 @@ class DataAccess extends CI_Model {
 	 */
 	public function majEtatFicheFrais($idVisiteur,$mois,$etat){
 		$req = "update af_ficheFrais 
-				set idEtat = '$etat', dateModif = now() 
+				set idEtat = '$etat', dateModif = now()
 				where af_fichefrais.idvisiteur ='$idVisiteur' and af_fichefrais.mois = '$mois'";
 		$this->db->simple_query($req);
 	}

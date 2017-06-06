@@ -71,7 +71,7 @@
 				foreach( $lesFraisHorsForfait as $unFraisHorsForfait) 
 				{
 					$libelle = $unFraisHorsForfait['libelle'];
-					$date = $unFraisHorsForfait['date'];
+					$date = $unFraisHorsForfait['dateFrais'];
 					$montant=$unFraisHorsForfait['montant'];
 					$id = $unFraisHorsForfait['id'];
 					echo 
